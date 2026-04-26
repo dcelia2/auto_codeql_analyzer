@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+start=$SECONDS
 
 GITHUB_TOKEN=${GITHUB_TOKEN:-""}
 
@@ -16,7 +17,8 @@ download_java_files() {
     local output_dir=$2
 
     local api_response
-    api_response=$(curl "${CURL_ARGS[@]}" "https://api.github.com/repos/$repo/git/trees/HEAD?recursive=1")
+    api_response=$(curl -s "${CURL_ARGS[@]}" "https://api.github.com/repos/$repo/git/trees/HEAD?recursive=1") 
+
 
     local error_msg
     error_msg=$(echo "$api_response" | jq -r '.message // empty')
@@ -36,21 +38,30 @@ download_java_files() {
         | jq -r '.tree[] | select(.path | endswith(".java")) | .path' \
         | while read -r filepath; do
             mkdir -p "$output_dir/$(dirname "$filepath")"
-            curl "${CURL_ARGS[@]}" "https://raw.githubusercontent.com/$repo/HEAD/$filepath" \
-                 -o "$output_dir/$filepath"
-            echo "  $filepath"
+            curl -s "${CURL_ARGS[@]}" "https://raw.githubusercontent.com/$repo/HEAD/$filepath" \
+                 -o "$output_dir/$filepath" >> logs 2>&1
+            echo "  $filepath" >> logs
         done
 }
 
 json_file=$1
+counter=1
+
+echo "[- PARTIE 2 OBTENTION -]"
+
+echo "début du téléchargement..."
 
 while IFS= read -r line; do
     id=$(echo "$line" | jq -r '.id')
     url=$(echo "$line" | jq -r '.source_code' | sed 's|https://github.com/||' | sed 's|/tree/.*||')
 
-    echo "ID: $id | Repo: $url"
+
     mkdir -p "repos/$id"
     download_java_files "$url" "repos/$id"
+    printf "Repo obtenu : %-40s progression: %d/%d  [%ds]\n" "$url" "$counter" "$2" "$((SECONDS - start))"
+    ((counter++))
 
 done < <(jq -c '.[]' "$json_file")
+
+echo "Tous les repos on été téléchargés"
 

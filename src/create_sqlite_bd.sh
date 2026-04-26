@@ -1,4 +1,7 @@
 #!/bin/bash
+start=$SECONDS
+
+echo "[- PARTIE 4 INIT SQLITE -]"
 
 DB_NAME="./data/sqlite.db"
 
@@ -27,3 +30,5 @@ sqlite3 "$DB_NAME" <<EOF
       UNIQUE(repo_id, error_id)
   );
 EOF
+
+echo "database sqlite créé dans $DB_NAME [$((SECONDS - start))s]" 

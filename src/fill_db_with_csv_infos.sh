@@ -1,8 +1,12 @@
 #!/bin/bash
+start=$SECONDS
+
+echo "[- PARTIE 6 PARSING CSV -]" 
 
 # Configuration
 DB_NAME="./data/sqlite.db"
 CSV_DIR="./results"
+counter=1
 
 # Vérification de l'existence des fichiers
 if [ ! -f "$DB_NAME" ]; then echo "Erreur : Base de données introuvable."; exit 1; fi
@@ -38,7 +42,8 @@ ON CONFLICT(repo_id, error_id) DO UPDATE SET occurrence_count = excluded.occurre
 EOF
     done
 
-    echo "Importation terminée pour le repo : $repo_id"
+    printf "Mis à jour : %-40s progression: %d/%d  [%ds]\n" "$repo_id" "$counter" "$1" "$((SECONDS - start))"
+    ((counter++))
 done
 
 echo "Traitement global terminé."

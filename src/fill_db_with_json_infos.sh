@@ -1,8 +1,12 @@
 #!/bin/bash
+start=$SECONDS
+
+echo "[- PARTIE 5 PARSING JSON -]"
 
 # Configuration
 DB_NAME="./data/sqlite.db"
 JSON_FILE="./java_repo.json"
+counter=1
 
 # Vérification de l'existence des fichiers
 if [ ! -f "$DB_NAME" ]; then echo "Erreur : Base de données introuvable."; exit 1; fi
@@ -31,7 +35,8 @@ jq -c '.[]' "$JSON_FILE" | while read -r item; do
       VALUES ('$id', $stars, '$categories', '$source_code');
 EOF
 
-    echo "Mis à jour : $id ($stars stars)"
+    printf "Mis à jour : %-20s (%-10s stars) progression: %d/%d  [%ds]\n" "$id" "$stars" "$counter" "$1" "$((SECONDS - start))"
+    ((counter++))
 done
 
 echo "Importation JSON terminée."
