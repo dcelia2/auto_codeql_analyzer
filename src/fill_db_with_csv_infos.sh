@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-DB_NAME="../data/sqlite.db"
+DB_NAME="./data/sqlite.db"
 CSV_DIR="."
 
 # Vérification de l'existence des fichiers
@@ -17,21 +17,18 @@ for file in "$CSV_DIR"/*.csv; do
     # Insertion du repo dans la table de référence
     sqlite3 "$DB_NAME" "INSERT OR IGNORE INTO repos (id) VALUES ('$repo_id');"
 
-    # 2. Traitement des erreurs (Extraction du Nom et de la Sévérité)
-    # Col 1: Nom de l'erreur, Col 3: Sévérité
+    # 2. Traitement des erreurs 
     awk -F',' '{gsub(/"/, "", $1); gsub(/"/, "", $3); print $1"|"$3}' "$file" | sort | uniq -c | while read -r count data; do
         
         error_name=$(echo "$data" | cut -d'|' -f1)
-        severity=$(echo "$data" | cut -d'|' -f2)
         
         # Échappement des apostrophes pour SQL
         sql_safe_name=$(echo "$error_name" | sed "s/'/''/g")
 
         # A. Mise à jour du catalogue d'erreurs
-        sqlite3 "$DB_NAME" "INSERT OR IGNORE INTO error_catalog (error_name, severity) VALUES ('$sql_safe_name', '$severity');"
+        sqlite3 "$DB_NAME" "INSERT OR IGNORE INTO error_catalog (error_name) VALUES ('$sql_safe_name', '$severity');"
 
         # B. Insertion ou mise à jour du rapport (table de faits)
-        # Utilisation de ON CONFLICT pour mettre à jour le compteur si le fichier est réimporté
         sqlite3 "$DB_NAME" <<EOF
 INSERT INTO error_reports (repo_id, error_id, occurrence_count)
 SELECT '$repo_id', error_id, $count

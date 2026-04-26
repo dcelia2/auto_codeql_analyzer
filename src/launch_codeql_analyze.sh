@@ -29,5 +29,7 @@ process_repo() {
     echo "[DONE] $id"
 }
 
-find repos -mindepth 1 -maxdepth 1 -type d \
-    |  process_repo
+for repo_dir in repos/*/; 
+do 
+    process_repo "$repo_dir" 
+done

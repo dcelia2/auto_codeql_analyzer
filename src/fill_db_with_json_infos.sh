@@ -29,7 +29,7 @@ jq -c '.[]' "$JSON_FILE" | while read -r item; do
 
       INSERT OR IGNORE INTO repos (id, stars, categories, url) 
       VALUES ('$id', $stars, '$categories', '$source_code');
-    EOF
+EOF
 
     echo "Mis à jour : $id ($stars stars)"
 done
