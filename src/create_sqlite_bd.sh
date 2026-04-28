@@ -1,7 +1,9 @@
 #!/bin/bash
 start=$SECONDS
 
-echo "[- PARTIE 2 INIT SQLITE -]"
+echo ""
+echo -e "\033[36m[- PARTIE 2 INIT SQLITE -]\033[0m"
+echo ""
 
 DB_NAME="./data/sqlite.db"
 

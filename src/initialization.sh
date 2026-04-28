@@ -1,7 +1,9 @@
 #!/bin/bash
 start=$SECONDS
 
-echo "[- PARTIE 1 INITIALISATION -]"
+echo ""
+echo -e "\033[36m[- PARTIE 1 INITIALISATION -]\033[0m"
+echo ""
 
 # Création de l'arborescence
 mkdir repos results dbs data 2>&1 | >>  logs

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "[- PARTIE 5 PARSING JSON -]"
+echo ""
+echo -e "\033[36m[- PARTIE 5 PARSING JSON -]\033[0m"
+echo ""
 
 # Configuration
 DB_NAME="./data/sqlite.db"

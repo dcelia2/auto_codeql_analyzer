@@ -3,6 +3,10 @@
 REPOS_DIR="repos"
 DB_FILE=data/sqlite.db
 
+echo ""
+echo -e "\033[36m[- PARTIE 7 COMPTAGE DES LIGNES -]\033[0m"
+echo ""
+
 # Parcours de chaque sous-dossier dans repos/
 for dir in "$REPOS_DIR"/*/; do
     [ -d "$dir" ] || continue
@@ -19,6 +23,5 @@ for dir in "$REPOS_DIR"/*/; do
     echo "$name : $line_count lignes"
 done
  
-echo ""
 echo "Résultats stockés dans '$DB_FILE'."
  

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "[- PARTIE 6 PARSING CSV -]" 
+echo ""
+echo -e "\033[36m[- PARTIE 6 PARSING CSV -]\033[0m" 
+echo ""
 
 # Configuration
 DB_NAME="./data/sqlite.db"
