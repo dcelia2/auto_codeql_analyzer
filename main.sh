@@ -1,15 +1,19 @@
 #!/usr/bin/bash
 
-GITHUB_TOKEN=""
+GITHUB_TOKEN=${GITHUB_TOKEN:-""}
 
 DL_THREADS=100
 CQL_THREADS=10
 
 NB_REPOS_BY_PASS=100
 
+JSON_FILENAME="data/json_index.json"
+
+set -euo pipefail
+
 # PARTIE 1
 
-./src/initialization.sh 
+./src/initialization.sh $JSON_FILENAME $NB_REPOS_BY_PASS
 
 for file in json/*.json; do 
 

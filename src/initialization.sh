@@ -1,11 +1,13 @@
 #!/bin/bash
+
+set -euo pipefail
+
 start=$SECONDS
 INPUT="$1"
 N="$2"
 
-BUFFER=""
+BUFFER=$(mktemp /tmp/buffer_XXXX.json)
 
-set -euo pipefail
 
 if [ ! -f "$INPUT" ]; then
   echo "Erreur : fichier '$INPUT' introuvable."
@@ -17,10 +19,10 @@ echo -e "\033[36m[- PARTIE 1 INITIALISATION -]\033[0m"
 echo ""
 
 # Création de l'arborescence
-mkdir repos results dbs data 2>&1 | >>  logs
+mkdir -p repos results dbs data 2>&1 | >>  logs
 
 # Séléction des repos appropriés
-jq '[.[] | select(.language_by_github == "Java")]' $INPUT > $BUFFER
+jq '[.[] | select(.language_by_github == "Java")]' "$INPUT" > "$BUFFER"
 
 TYPE=$(jq -r 'type' "$BUFFER")
 if [ "$TYPE" != "array" ]; then
