@@ -40,8 +40,9 @@ process_repo() {
 
 }
 
-
-echo "[- PARTIE 4 ANALYSE -]"
+echo ""
+echo -e "\033[36m[- PARTIE 4 ANALYSE -]\033[0m"
+echo ""
 
 echo "début de l'analyse..."
 

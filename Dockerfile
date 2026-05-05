@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
  
-ARG CODEQL_VERSION=2.20.5
+ARG CODEQL_VERSION=2.25.2
  
 RUN apt-get update && apt-get install -y \
     curl \
@@ -19,8 +19,9 @@ RUN curl -fsSL \
 ENV PATH="/usr/local/codeql:${PATH}"
 
 COPY src/* /workspace/src/
-COPY main.sh json_index.json /workspace/
+COPY main.sh /workspace/
  
 WORKDIR /workspace
  
 CMD ["./main.sh"]
+#CMD ["/bin/bash"]

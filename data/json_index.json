@@ -1,0 +1,32 @@
+[
+    {
+        "id": "5148eddb-c68e-4c72-92b7-d54f8ee81538",
+        "source_code": "https://github.com/jdmonin/anstop",
+        "user_name": "jdmonin",
+        "project_name": "An.stop",
+        "description": {
+            "en-US": "A simple stopwatch, that also supports lap timing and a countdown timer. The\ncountdown timer doesn't make an alarm so an eye will have to be kept on it."
+        },
+        "categories": [
+            "Time"
+        ],
+        "stars_by_github": 5,
+        "created_at_by_github": "2015-08-01T15:12:47Z",
+        "last_activity_at_by_github": "2024-04-04T11:11:19Z",
+        "language_by_github": "Java",
+        "versions": [
+            {
+                "date": 1344556800000,
+                "url": "https://f-droid.org/repo/An.stop_10_src.tar.gz",
+                "size": 558337,
+                "version": "1.5"
+            },
+            {
+                "date": 1309737600000,
+                "url": "https://f-droid.org/repo/An.stop_9_src.tar.gz",
+                "size": 63674,
+                "version": "1.4"
+            }
+        ]
+    }
+]

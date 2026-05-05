@@ -56,7 +56,9 @@ download_java_files() {
 json_file=$1
 counter=1
 
-echo "[- PARTIE 2 OBTENTION -]"
+echo ""
+echo -e "\033[36m[- PARTIE 3 OBTENTION -]\033[0m"
+echo ""
 
 echo "début du téléchargement..."
 
