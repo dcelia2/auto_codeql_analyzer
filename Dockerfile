@@ -26,8 +26,6 @@ RUN \
  
 ENV PATH="/usr/local/codeql:${PATH}"
 
-COPY src/* /workspace/src/
- 
 WORKDIR /workspace
 
 ENTRYPOINT ./src/main.sh

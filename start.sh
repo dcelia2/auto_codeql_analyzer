@@ -13,5 +13,5 @@ fi
 if docker container exists "$CONTAINER_NAME"; then
     docker start -ai "$CONTAINER_NAME" 
 else
-    docker run -it --name "$CONTAINER_NAME" -v ./:/workspace "$IMAGE_NAME"
+    docker run -it --name "$CONTAINER_NAME" -v ./:/workspace -v $HOME/.m2:/root/.m2 "$IMAGE_NAME"
 fi

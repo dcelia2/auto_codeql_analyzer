@@ -12,7 +12,7 @@ process_repo() {
     start=$SECONDS
 
     # Création de la base
-    codeql database create "dbs/$id" \
+    codeql database create "generated/dbs/$id" \
         --language=java \
         --build-mode=none \
         --source-root="$repo_dir" \
@@ -25,10 +25,10 @@ process_repo() {
     fi
 
     # Analyse avec le pack custom
-    codeql database analyze "dbs/$id" \
+    codeql database analyze "generated/dbs/$id" \
         green-code-initiative/java-queries@1.0.12 \
         --format=csv \
-        --output="results/$id.csv" \
+        --output="generated/results/$id.csv" \
         2>&1 | >> logs
 
     # Suppression de la base
@@ -45,7 +45,7 @@ echo ""
 
 echo "début de l'analyse..."
 
-for repo_dir in repos/*/; 
+for repo_dir in generated/repos/*/; 
 do 
   while [ "$(jobs -rp | wc -l)" -ge "$THREADS" ]; 
   do

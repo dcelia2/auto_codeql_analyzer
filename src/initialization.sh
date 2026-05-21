@@ -19,7 +19,7 @@ echo -e "\033[36m[- PARTIE 1 INITIALISATION -]\033[0m"
 echo ""
 
 # Création de l'arborescence
-mkdir -p repos results dbs data 2>&1 | >>  logs
+mkdir -p generated/json generated/repos generated/results generated/dbs 2>&1 | >>  logs
 
 # Séléction des repos appropriés
 jq '[.[] | select(.language_by_github == "Java")]' "$INPUT" > "$BUFFER"
@@ -40,15 +40,12 @@ if [ "$TOTAL" -eq 0 ]; then
   exit 0
 fi
 
-# --- Création du dossier de sortie ---
-mkdir -p json
-
 # --- Découpage ---
 PART=1
 OFFSET=0
 
 while [ "$OFFSET" -lt "$TOTAL" ]; do
-  OUTFILE="json/part_$(printf '%04d' "$PART").json"
+  OUTFILE="generated/json/part_$(printf '%04d' "$PART").json"
   jq --argjson offset "$OFFSET" --argjson n "$N" '.[$offset : $offset + $n]' "$BUFFER" > "$OUTFILE"
   COUNT=$(jq 'length' "$OUTFILE")
   echo "  -> $OUTFILE  ($COUNT élément(s))"

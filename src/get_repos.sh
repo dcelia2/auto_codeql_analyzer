@@ -31,14 +31,14 @@ download_java_files() {
     local error_msg
     error_msg=$(echo "$api_response" | jq -r '.message // empty')
     if [[ -n "$error_msg" ]]; then
-        echo "  [SKIP] $repo : $error_msg"
+        echo "[SKIP] $repo : $error_msg"
         return 1
     fi
 
     local tree_check
     tree_check=$(echo "$api_response" | jq '.tree // empty')
     if [[ -z "$tree_check" ]]; then
-        echo "  [SKIP] $repo : arbre vide ou réponse inattendue"
+        echo "[SKIP] $repo : arbre vide ou réponse inattendue"
         return 1
     fi
 
@@ -64,11 +64,6 @@ echo "début du téléchargement..."
 
 build_curl_args
 
-SUCCESS=0
-FAIL=0
-PIDS=()
-RESULTS=()
-
 while IFS= read -r line; do
     id=$(echo "$line" | jq -r '.id')
     url=$(echo "$line" | jq -r '.source_code' | sed 's|https://github.com/||' | sed 's|/tree/.*||')
@@ -76,12 +71,12 @@ while IFS= read -r line; do
         sleep 0.5
     done
     
-    download_java_files "$url" "repos/$id" "$counter" "$2" &
-    PIDS+=($!)
+    download_java_files "$url" "generated/repos/$id" "$counter" "$2" &
+    ((counter ++))
 
 done < <(jq -c '.[]' "$json_file")
-SUCCESS=0
-FAIL=0
-PIDS=()
-RESULTS=()echo "Tous les repos on été téléchargés"
+
+wait
+
+echo "Tous les repos on été téléchargés"
 

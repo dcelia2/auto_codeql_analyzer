@@ -5,7 +5,7 @@ echo -e "\033[36m[- PARTIE 5 PARSING JSON -]\033[0m"
 echo ""
 
 # Configuration
-DB_NAME="./data/sqlite.db"
+DB_NAME="sqlite.db"
 JSON_FILE=$2
 counter=1
 

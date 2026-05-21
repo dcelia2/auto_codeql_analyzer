@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOS_DIR="repos"
-DB_FILE=data/sqlite.db
+DB_FILE=sqlite.db
 
 echo ""
 echo -e "\033[36m[- PARTIE 7 COMPTAGE DES LIGNES -]\033[0m"

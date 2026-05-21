@@ -6,3 +6,7 @@ dbs
 java_repo.json
 json
 generated
+config.json
+sqlite.db
+json_short.json
+rebuild_docker.sh

@@ -63,7 +63,7 @@ CONFIG_FILE="./config.json"
 DEFAULT_DL_THREADS=100
 DEFAULT_CQL_THREADS=10
 DEFAULT_NB_REPOS_BY_PASS=100
-DEFAULT_JSON_FILENAME="data/json_index.json"
+DEFAULT_JSON_FILENAME="json_index.json"
 DEFAULT_QLPACK_VERSION="1.0.12"
 
 # ─────────────────────────────────────────
@@ -161,7 +161,6 @@ if gum confirm "  Modifier les paramètres avancés ?" --default=false; then
     save_config
     ok "Configuration sauvegardée dans $CONFIG_FILE"
 fi
-───────────────────────────────────────
 
 # ─────────────────────────────────────────
 #  RÉCAPITULATIF
@@ -184,61 +183,32 @@ gum confirm "  Lancer la pipeline ?" || { info "Annulé."; exit 0; }
 # ─────────────────────────────────────────
 header
 
-# ── ÉTAPE 1 ──────────────────────────────
-step_banner 1 "Initialisation"
-run_step "Initialisation" \
-   ./src/initialization.sh "data/json_index.json" 100 > data/logs.txt
+# PARTIE 1
+./src/initialization.sh $JSON_FILENAME $NB_REPOS_BY_PASS
 
-# ── ÉTAPE 2 ──────────────────────────────
-step_banner 2 "Création de la base SQLite"
+# PARTIE 2
+./src/create_sqlite_bd.sh 
 
-# Récupère le nombre de repos depuis le premier fichier JSON
-FIRST_JSON=$(ls json/*.json 2>/dev/null | head -1 || true)
-if [[ -z "$FIRST_JSON" ]]; then
-    err "Aucun fichier JSON trouvé dans json/"
-    exit 1
-fi
-NB_REPOS=$(jq 'length' "$FIRST_JSON")
+for file in generated/json/*.json; do 
+  
+  nb_repos=$(jq 'length' $file)
 
-run_step "Création BDD SQLite" \
-    ./src/create_sqlite_bd.sh "$NB_REPOS"
+  echo "$nb_repos repos détéctés"
+  
+  # PARTIE 3
+  ./src/get_repos.sh $file $nb_repos $DL_THREADS $GITHUB_TOKEN
 
-# ── BOUCLE SUR LES FICHIERS JSON ─────────
-TOTAL_FILES=$(ls json/*.json | wc -l)
-CURRENT=0
+  # PARTIE 4
+  ./src/launch_codeql_analyze.sh $nb_repos $CQL_THREADS
 
-for file in json/*.json; do
-    CURRENT=$((CURRENT + 1))
-    NB_REPOS=$(jq 'length' "$file")
+  # PARTIE 5
+  ./src/fill_db_with_json_infos.sh $nb_repos
 
-    echo ""
-    gum style $DIM "  Fichier $CURRENT/$TOTAL_FILES : $file  ($NB_REPOS repos)"
-    echo ""
+  # PARTIE 6
+  ./src/fill_db_with_csv_infos.sh $nb_repos
 
-    # ── ÉTAPE 3 ────────────────────────────
-    step_banner 3 "Téléchargement des repos"
-    run_step "Téléchargement ($NB_REPOS repos, $DL_THREADS threads)" \
-        ./src/get_repos.sh "$file" "$NB_REPOS" "$DL_THREADS" "$GITHUB_TOKEN"
-
-    # ── ÉTAPE 4 ────────────────────────────
-    step_banner 4 "Analyse CodeQL"
-    run_step "Analyse CodeQL ($CQL_THREADS threads)" \
-        ./src/launch_codeql_analyze.sh "$NB_REPOS" "$CQL_THREADS"
-
-    # ── ÉTAPE 5 ────────────────────────────
-    step_banner 5 "Remplissage BDD — infos JSON"
-    run_step "Import JSON → BDD" \
-        ./src/fill_db_with_json_infos.sh "$NB_REPOS" "$file"
-
-    # ── ÉTAPE 6 ────────────────────────────
-    step_banner 6 "Remplissage BDD — infos CSV"
-    run_step "Import CSV → BDD" \
-        ./src/fill_db_with_csv_infos.sh "$NB_REPOS"
-
-    # ── ÉTAPE 7 ────────────────────────────
-    step_banner 7 "Comptage des lignes"
-    run_step "Calcul nb lignes de code" \
-        ./src/fill_db_with_nb_lines.sh
+  # PARTIE 7
+  ./src/fill_db_with_nb_lines.sh
 done
 
 # ─────────────────────────────────────────
