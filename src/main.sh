@@ -11,7 +11,6 @@ YELLOW="--foreground 220"
 CYAN="--foreground 51"
 DIM="--foreground 240"
 
-codeql pack download green-code-initiative/java-queries@1.0.12
 
 clear
 
@@ -54,49 +53,115 @@ run_step() {
     ok "$title"
 }
 
-# ─────────────────────────────────────────
-#  CONFIGURATION INTERACTIVE
-# ─────────────────────────────────────────
 header
 
+CONFIG_FILE="./config.json"
+
+# ─────────────────────────────────────────
+#  VALEURS PAR DÉFAUT
+# ─────────────────────────────────────────
+DEFAULT_DL_THREADS=100
+DEFAULT_CQL_THREADS=10
+DEFAULT_NB_REPOS_BY_PASS=100
+DEFAULT_JSON_FILENAME="data/json_index.json"
+DEFAULT_QLPACK_VERSION="1.0.12"
+
+# ─────────────────────────────────────────
+#  CHARGEMENT CONFIG EXISTANTE
+# ─────────────────────────────────────────
+if [[ -f "$CONFIG_FILE" ]]; then
+    GITHUB_TOKEN=$(jq -r '.github_token      // empty' "$CONFIG_FILE")
+    DL_THREADS=$(jq -r   '.dl_threads        // empty' "$CONFIG_FILE")
+    CQL_THREADS=$(jq -r  '.cql_threads       // empty' "$CONFIG_FILE")
+    NB_REPOS_BY_PASS=$(jq -r '.nb_repos_by_pass // empty' "$CONFIG_FILE")
+    JSON_FILENAME=$(jq -r '.json_filename     // empty' "$CONFIG_FILE")
+    QLPACK_VERSION=$(jq -r '.qlpack_version   // empty' "$CONFIG_FILE")
+fi
+
+# Fallback sur les défauts si champ vide
+DL_THREADS=${DL_THREADS:-$DEFAULT_DL_THREADS}
+CQL_THREADS=${CQL_THREADS:-$DEFAULT_CQL_THREADS}
+NB_REPOS_BY_PASS=${NB_REPOS_BY_PASS:-$DEFAULT_NB_REPOS_BY_PASS}
+JSON_FILENAME=${JSON_FILENAME:-$DEFAULT_JSON_FILENAME}
+QLPACK_VERSION=${QLPACK_VERSION:-$DEFAULT_QLPACK_VERSION}
+
+# ─────────────────────────────────────────
+#  SAUVEGARDE CONFIG 
+# ─────────────────────────────────────────
+save_config() {
+    jq -n \
+        --arg token    "$GITHUB_TOKEN" \
+        --arg dl       "$DL_THREADS" \
+        --arg cql      "$CQL_THREADS" \
+        --arg repos    "$NB_REPOS_BY_PASS" \
+        --arg json     "$JSON_FILENAME" \
+        --arg qlpack   "$QLPACK_VERSION" \
+        '{
+            github_token:    $token,
+            dl_threads:      $dl,
+            cql_threads:     $cql,
+            nb_repos_by_pass: $repos,
+            json_filename:   $json,
+            qlpack_version:  $qlpack
+        }' > "$CONFIG_FILE"
+    chmod 600 "$CONFIG_FILE"
+}
+
+# ─────────────────────────────────────────
+#  GITHUB TOKEN
+# ─────────────────────────────────────────
 gum style $BOLD $CYAN "Configuration de la pipeline"
 echo ""
 
-# GITHUB TOKEN
 if [[ -z "${GITHUB_TOKEN:-}" ]]; then
-    info "GitHub Token non défini dans l'environnement"
-    GITHUB_TOKEN=$(gum input --password --placeholder "ghp_xxxxxxxxxxxxxxxxxxxx" --prompt "  Token GitHub › ")
+    info "GitHub Token non défini"
+    GITHUB_TOKEN=$(gum input \
+        --placeholder "ghp_xxxxxxxxxxxxxxxxxxxx" \
+        --prompt "  Token GitHub › ")
     if [[ -z "$GITHUB_TOKEN" ]]; then
         err "Token GitHub requis. Abandon."
         exit 1
     fi
+    save_config
+    ok "Token sauvegardé"
+else
+    ok "Token GitHub chargé depuis $CONFIG_FILE"
 fi
 
 echo ""
 
-# PARAMÈTRES AVANCÉS
+# ─────────────────────────────────────────
+#  PARAMÈTRES AVANCÉS
+# ─────────────────────────────────────────
 if gum confirm "  Modifier les paramètres avancés ?" --default=false; then
     echo ""
-    gum style $DIM "  (Entrée pour garder la valeur par défaut)"
+    gum style $DIM "  (Entrée pour garder la valeur actuelle)"
     echo ""
 
-    DL_INPUT=$(gum input --placeholder "100" --value "100" --prompt "  Threads de téléchargement › ")
-    DL_THREADS=${DL_INPUT:-100}
+    QLPACK_VERSION=$(gum input \
+        --placeholder "$QLPACK_VERSION" --value "$QLPACK_VERSION" \
+        --prompt "  Version du pack de requêtes › ")
 
-    CQL_INPUT=$(gum input --placeholder "10" --value "10" --prompt "  Threads CodeQL › ")
-    CQL_THREADS=${CQL_INPUT:-10}
+    DL_THREADS=$(gum input \
+        --placeholder "$DL_THREADS" --value "$DL_THREADS" \
+        --prompt "  Threads de téléchargement › ")
 
-    REPOS_INPUT=$(gum input --placeholder "100" --value "100" --prompt "  Repos par passe › ")
-    NB_REPOS_BY_PASS=${REPOS_INPUT:-100}
+    CQL_THREADS=$(gum input \
+        --placeholder "$CQL_THREADS" --value "$CQL_THREADS" \
+        --prompt "  Threads CodeQL › ")
 
-    JSON_INPUT=$(gum input --placeholder "data/json_index.json" --value "data/json_index.json" --prompt "  Fichier JSON index › ")
-    JSON_FILENAME=${JSON_INPUT:-"data/json_index.json"}
-else
-    DL_THREADS=100
-    CQL_THREADS=10
-    NB_REPOS_BY_PASS=100
-    JSON_FILENAME="data/json_index.json"
+    NB_REPOS_BY_PASS=$(gum input \
+        --placeholder "$NB_REPOS_BY_PASS" --value "$NB_REPOS_BY_PASS" \
+        --prompt "  Repos par passe › ")
+
+    JSON_FILENAME=$(gum input \
+        --placeholder "$JSON_FILENAME" --value "$JSON_FILENAME" \
+        --prompt "  Fichier JSON index › ")
+
+    save_config
+    ok "Configuration sauvegardée dans $CONFIG_FILE"
 fi
+───────────────────────────────────────
 
 # ─────────────────────────────────────────
 #  RÉCAPITULATIF

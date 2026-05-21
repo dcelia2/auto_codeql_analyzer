@@ -64,6 +64,11 @@ echo "début du téléchargement..."
 
 build_curl_args
 
+SUCCESS=0
+FAIL=0
+PIDS=()
+RESULTS=()
+
 while IFS= read -r line; do
     id=$(echo "$line" | jq -r '.id')
     url=$(echo "$line" | jq -r '.source_code' | sed 's|https://github.com/||' | sed 's|/tree/.*||')
@@ -72,10 +77,11 @@ while IFS= read -r line; do
     done
     
     download_java_files "$url" "repos/$id" "$counter" "$2" &
-    
-    ((counter++))
+    PIDS+=($!)
 
 done < <(jq -c '.[]' "$json_file")
-wait
-echo "Tous les repos on été téléchargés"
+SUCCESS=0
+FAIL=0
+PIDS=()
+RESULTS=()echo "Tous les repos on été téléchargés"
 

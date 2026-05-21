@@ -11,7 +11,7 @@ fi
 
 # Lancer si le container existe déjà, sinon le créer
 if docker container exists "$CONTAINER_NAME"; then
-    docker start -ai "$CONTAINER_NAME" -v ./data:/workspace/data
+    docker start -ai "$CONTAINER_NAME" 
 else
-    docker run -it --name "$CONTAINER_NAME" -v ./data:/workspace/data "$IMAGE_NAME"
+    docker run -it --name "$CONTAINER_NAME" -v ./:/workspace "$IMAGE_NAME"
 fi
