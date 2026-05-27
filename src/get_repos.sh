@@ -32,6 +32,7 @@ download_java_files() {
     error_msg=$(echo "$api_response" | jq -r '.message // empty')
     if [[ -n "$error_msg" ]]; then
         echo "[SKIP] $repo : $error_msg"
+        rm -r $output_dir
         return 1
     fi
 
@@ -39,6 +40,7 @@ download_java_files() {
     tree_check=$(echo "$api_response" | jq '.tree // empty')
     if [[ -z "$tree_check" ]]; then
         echo "[SKIP] $repo : arbre vide ou réponse inattendue"
+        rm -r $output_dir
         return 1
     fi
 
@@ -70,9 +72,13 @@ while IFS= read -r line; do
     while [ "$(jobs -rp | wc -l)" -ge "$THREADS" ]; do
         sleep 0.5
     done
-    
-    download_java_files "$url" "generated/repos/$id" "$counter" "$2" &
-    ((counter ++))
+
+    if [ -d "generated/repos/$id" ]; then
+      echo "Dossier trouvé pour $url, téléchargement skipped"
+    else
+      download_java_files "$url" "generated/repos/$id" "$counter" "$2" &
+      ((counter ++))
+    fi
 
 done < <(jq -c '.[]' "$json_file")
 
