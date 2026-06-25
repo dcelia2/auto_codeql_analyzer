@@ -33,4 +33,11 @@ sqlite3 "$DB_NAME" "CREATE TABLE IF NOT EXISTS repos (
       UNIQUE(repo_id, error_id)
   );"
 
+sqlite3 "$DB_NAME" <<EOF
+CREATE TABLE IF NOT EXISTS repo_categories (
+    repo_id TEXT,
+    category TEXT
+);
+EOF
+
 echo "database sqlite créé dans $DB_NAME [$((SECONDS - start))s]"
