@@ -17,12 +17,13 @@ if [ ! -f "$JSON_FILE" ]; then echo "Erreur : Fichier JSON introuvable."; exit 1
 jq -c '.[]' "$JSON_FILE" | while read -r item; do
 
     start=$SECONDS
-    
+
     # Extraction des valeurs
     id=$(echo "$item" | jq -r '.id')
     stars=$(echo "$item" | jq -r '.stars_by_github // 0')
     source_code=$(echo "$item" | jq -r '.source_code // ""')
-    
+    last_commit_date=$(echo "$item" | jq -r '.last_activity_at_by_github // ""')
+
     # Transformation de la liste des catégories ["A", "B"] en chaîne "A, B"
     categories=$(echo "$item" | jq -r '.categories | join(", ") // ""')
     created_at=$(echo "$item" | jq -r '.created_at_by_github // ""')
@@ -33,13 +34,23 @@ jq -c '.[]' "$JSON_FILE" | while read -r item; do
       SET stars = $stars, 
           categories = '$categories', 
           url = '$source_code',
-          creation_date = '$created_at'
+          creation_date = '$created_at',
+	  last_commit_date='$last_commit_date'
       WHERE id = '$id';
 
-      INSERT OR IGNORE INTO repos (id, stars, categories, url, creation_date) 
-      VALUES ('$id', $stars, '$categories', '$source_code', '$created_at');
+      INSERT OR IGNORE INTO repos (id, stars, categories, url, creation_date, last_commit_date) 
+      VALUES ('$id', $stars, '$categories', '$source_code', '$created_at', '$last_commit_date');
+EOF
+	# Insertion dans repo_categories
+      echo "$item" | jq -r '.categories[]?' | while read -r cat; do
+    	safe_cat=$(echo "$cat" | sed "s/'/''/g")
+
+    sqlite3 "$DB_NAME" <<EOF
+	INSERT OR IGNORE INTO repo_categories (repo_id, category)
+	VALUES ('$id', '$safe_cat');
 EOF
 
+done
     printf "Mis à jour : %-40s progression: %d/%d  [%ds]\n" "$id" "$counter" "$1" "$((SECONDS - start))"
     ((counter++))
 done
