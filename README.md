@@ -1,29 +1,29 @@
 # Auto Codeql Analyzer
 
-## Utilisation :
+## Usage:
 
-prérequis : 
- - un fichier json contenant une liste de repos github.
- - avoir docker installé
- - sqlite3 (optionnel)
+Prerequisites: 
+ - A JSON file containing a list of GitHub repositories(src/json_index.json).
+ - Docker must be installed
+ - SQLite3 (optional)
 
- étapes de lancement : 
-- cloner le repo
+Steps to run: 
+- Clone the repository
 - ```./start.sh```
 
-configuration :
-- dans la fenêtre de l'interface, renseigner un github token valide avec les droits "repos"
-- renseigner les informations demandées
-toutes les configurations seront stocké dans le ```config.json``` généré après le premier lancement de l'application.
+Configuration:
+- In the interface window, enter a valid GitHub token with ‘repos’ permissions
+- Enter the requested information
+All configuration settings will be stored in the ```config.json``` file generated after the application is launched for the first time.
 
-notes :
-- le dossier ```generated``` contient les résidus d'éxécution et peut être supprimé à la fin de l'analyse globale.
-- codeql va télécharger beaucoup de Go de dépendances maven, elles sont stocké dans votre ```~/.m2``` afin de ne pas avoir à les re-télécharger d'une éxécution sur l'autre. 
+Notes:
+- The ```generated``` folder contains execution artefacts and can be deleted once the full analysis is complete.
+- CodeQL will download several GB of Maven dependencies; these are stored in your ```~/.m2``` directory so that they do not need to be re-downloaded between runs. 
 
-interprétation des données :
-le programme fourni une base de donnée SQLITE (sqlite.db)
-contenant 3 tables 
- - ```repos``` contients toutes les infos des repository
- - ```error_reports``` contient les erreurs levés
- - ```error_catalog``` contient la liste des différentes erreures levées.
-
+Interpreting the data:
+The programme provides a SQLite database (output.db)
+containing four tables:
+ - ```repos``` contains all repository information
+ - ```error_reports``` contains the types of issues raised, their occurrences per repository, and the IDs of those repositories
+ - ```error_catalog``` contains a list of the various issues raised in at least one repository (positive identifiers) or never encountered (negative identifiers).
+ - ```repo_categories``` contains the repository identifiers and their categories (if they have more than one: one row per category)
