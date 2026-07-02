@@ -1,0 +1,45 @@
+Liste détaillée des requetes :
+
+- Requete 1 : (Bâton + Top 10 + Camembert) 
+Classement décroissant des green issues par nb total d'apparition dans tous les repos
+
+- Requete 2 : Calcul du nombre moyen de green issues  par repos pour chaque année 
+
+- Requete 3 : (Bâtons-Classes) Calcul de la moyenne du nombre de green issues par repos en fonction de son nombre d'étoiles
+
+- Requete 4 : (Bâtons-Classes) Nombre d'issues du repo en fonction de son nombre de lignes
+
+- Requete 5 : test.py
+
+- Requete 6 : (Camembert) Catégories classées par nombre de repo avec 0 issue
+
+- Requete 6-bis : (Bâtons) Pourcentages de repos qui ont 0 green issues par catégories
+
+- Requete 7 : (Bâtons + Top 10 + Camembert) Classement des issues disctinctes par occurence dans les repos 
+
+- Requete 8 : (Bâtons) Distribution des repos par nombre de green issues distinctes
+
+- Requete 9 : (Bâtons + Top 10) Pour chaque type de green issues : la moyenne d’occurrences dans un repos
+
+- Requete 10 : (Bâtons + Camembert) Moyennes de green issues par repo selon leur catégorie
+
+- Requete 11 : (Bâtons) Distribution et % des repos avec 0 green issue par années de création 
+
+- Requete 12 : (Nuage de points-Tendance) Nombre de green issues pour 1000 lignes de code en fonction du nombre de lignes du repo
+
+- Requete 13 : (Nuage de points-tendance + bâtons) Nombre de green issues par année de dernière mise à jour (commit)
+
+- Requete 14 : (Nuages de points-Tendance + par types + Bâtons) Nombre de green issues par années de durée de vie 
+
+- Requete 15 : (Bâtons) % repos avec 0 green issue selon l'année de dernière mise à jour (commit) et selon la durée de vie
+
+- Requete 16 : (Diagramme Doubles barres) nb de repos et nombre total d'issues par type d'issue
+
+- Requete 17 : (Bâtons) Moyenne du nombre de green issues distinctes par catégorie
+
+- Requête 18 : (Diagramme Doubles barres) Distribution des repos pa année de dernier commit et nombre de repos ayant 0 green issue parmi ceux-là
+
+- Requete 18b : (Diagramme Doubles barres) Idem avec l'année de création
+
+- Requete 19 : (Nuage de points) Choix du type de green issue puis 
+Nombre de ce type de green issue pour 1000 lignes en fonction du nombre de lignes du repo

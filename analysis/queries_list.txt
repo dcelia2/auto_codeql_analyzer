@@ -1,0 +1,51 @@
+Detailed list of queries:
+
+- Query 0: Interesting statistics on the analysed repositories
+
+- Query 1: (Bar chart + Top 10 + Pie chart)
+Ranking in descending order of green issues by total number of appearances across repositories
+
+- Query 2: Average number of green issues per repository for each year
+
+- Query 3: (Binned bar chart) Average number of green issues per repository based on its star count
+
+- Query 4: (Binned bar chart) Number of green issues in the repository based on its number of lines
+
+- Query 5: test.py
+
+- Query 6: (Pie chart) Categories ranked by number of repos with 0 green issue
+
+- Query 6-bis: (Bar chart) Percentages of repos with 0 green issues by category
+
+- Query 7: (Bar chart + Top 10 + Pie chart) Ranking of distinct green issues by frequency in repos
+
+- Query 8: (Binned bar chart) Distribution of repositories by number of distinct green issues
+
+- Query 9: (Bar chart + Top 10) For each type of green issue: the average number of occurrences in ONE repository
+
+- Query 10: (Bar chart + Pie chart) Average number of green issues per repository by category
+
+- Query 11: (Bar chart) Distribution and percentage of repositories with 0 green issues by year of creation
+
+- Query 12: (Scatter plot – Trend) Number of green issues per 1000 lines of code based on the number of lines in the repository
+
+- Query 13: (Scatter plot – trend + bar chart) Number of green issues by year of last update (commit)
+
+- Query 14: (Scatter plot – Trend + by type + Bar charts) Number of green issues by year of lifetime
+
+- Query 15 + 15b: (2 Bar charts) Percentage of repositories with 0 green issues by year of last update (commit) and by lifetime
+
+- Query 16: (Double-bar chart) Total number of occurrences by green issue types and number of occurrences in distinct repositories
+
+- Query 17: (Bar chart) Average number of distinct green issues per category
+
+- Query 18: (Double-bar chart) Distribution of repositories by year of last commit and the number of repositories with 0 green issue amongst them
+
+- Query 18b : (Double-bar chart) The same applies to the year of creation
+
+- Query 19: (Scatter plot) Select the type of green issue and
+Number of that type of green issue per 1000 lines based on the number of lines in the repository
+
+
+
+
