@@ -9,7 +9,7 @@ def run(tab) :
 	df["distinct_ratio"] = (
  	   df["distinct_repos"] / df["total_occurrences"] * 100
 	)
-	plt.figure(figsize=(12, 10))
+	plt.figure(figsize=(8, 6))
 	plt.barh(
 	    df["error_name"],
 	    df["total_occurrences"],
@@ -24,19 +24,19 @@ def run(tab) :
 	    label="Distinct repositories",
 	    color="green"
 	)
-	plt.xlabel("Number of Green Issues", fontweight="bold")
-	plt.ylabel("Green Issue Types", fontweight="bold")
-	plt.title(
-	    "Top 10 Green Issue types by Occurrences and Repository Coverage",
-	    fontweight="bold"
-	)
+	plt.xticks(fontsize=12)
+	plt.yticks(fontsize=12)
+	plt.xlabel("Number of Green Issues", fontweight="bold", fontsize=14)
+	plt.ylabel("Green Issue Types", fontweight="bold", fontsize=14)
+#	plt.title("Top 10 Green Issue types by Occurrences and Repository Coverage", fontweight="bold")
 	for i, (name, ratio) in enumerate(zip(df["error_name"], df["distinct_ratio"])):
 	    plt.text(
-	        1800, i,  
+	        2200, i,  
 	        f"{ratio:.1f}%",
 	        va="center",
 	        ha="right",
-	        fontweight="bold"
+	        fontweight="bold",
+		fontsize=12
 	    )
 	plt.legend()
 	plt.tight_layout()

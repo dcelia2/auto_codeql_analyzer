@@ -22,7 +22,7 @@ def run(tab) :
 	total_repos=df_plot["nb_repos"].sum()
 	df_plot["categorie"] = pd.Categorical(df_plot["categorie"], categories=order, ordered=True)
 	df_plot = df_plot.sort_values("categorie")
-	plt.figure(figsize=(18, 12))
+	plt.figure(figsize=(6, 8))
 	bars=plt.bar(
 	    df_plot["categorie"],
 	    df_plot["nb_repos"],
@@ -36,21 +36,24 @@ def run(tab) :
             	f"{pct:.1f}%",
 	        ha="center",
 	        va="bottom",
-	        fontsize=9
+	        fontsize=12
         )
 	legend_item = Line2D(
 	    [0], [0],
 	    color="none",
-	    label="%  :  Percentage of analysed repositories"
+	    label="%  :  Percentage of \n      analysed repositories"
 	)
 	plt.legend(
 	    handles=[legend_item],
 	    loc="upper right",
-	    handlelength=0
+	    handlelength=0,
+	    fontsize= 12
 	)
-	plt.xlabel("Distinct Green Issue Count", fontweight="bold")
-	plt.ylabel("Number of repositories", fontweight="bold")
-	plt.title("Distribution of Repositories by Number of Distinct Green Issues", fontweight="bold")
+	plt.xticks(fontsize=12)
+	plt.yticks(fontsize=12)
+	plt.xlabel("Distinct Green Issue Count", fontweight="bold", fontsize=14)
+	plt.ylabel("Number of repositories", fontweight="bold", fontsize=14)
+#	plt.title("Distribution of Repositories by Number of Distinct Green Issues", fontweight="bold", fontsize=14)
 	plt.xticks(rotation=30, ha="right")
 	plt.tight_layout()
 	plt.savefig(RESULTATS_DIR / "R08-distrib-nb_distinct_issues_by_repo.pdf")

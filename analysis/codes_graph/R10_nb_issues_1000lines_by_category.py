@@ -23,7 +23,7 @@ def run(tab) :
 	plt.savefig (RES_A_SUP / "R10-pie-nb_issues-categories.pdf", bbox_inches="tight")
 # Bar chart
 	df_plot = pd.read_sql_query(r10, tab)
-	plt.figure(figsize=(18, 10))
+	plt.figure(figsize=(8, 8))
 	bars=plt.bar(
 	    df_plot["category"],
 	    df_plot["avg_errors_per_repo"],
@@ -31,14 +31,16 @@ def run(tab) :
 	)
 	for bar, avg in zip(bars, df_plot["avg_errors_per_repo"]):
 	    plt.text(
-		bar.get_x()+bar.get_width()/3,
+		bar.get_x()+bar.get_width()/15,
 		bar.get_height()+0.03,
 		f"{avg:.1f}",
 		fontsize=12
 	    )
-	plt.xlabel("Categories", fontweight= "bold")
-	plt.ylabel("Average Green Issues per 1000 Lines", fontweight= "bold")
-	plt.title("Average Green Issues per 1000 Lines by Respository Category", fontweight="bold")
+	plt.xticks(fontsize=12)
+	plt.yticks(fontsize=12)
+	plt.xlabel("Categories", fontweight= "bold", fontsize=14)
+	plt.ylabel("Average Green Issues per 1000 Lines", fontweight= "bold", fontsize=14)
+#	plt.title("Average Green Issues per 1000 Lines by Respository Category", fontweight="bold")
 	plt.xticks(rotation=45, ha="right")
 	plt.tight_layout()
 	plt.savefig( RESULTATS_DIR / "R10-bar-nb_issues_1000lines-categories.pdf")

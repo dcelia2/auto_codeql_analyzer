@@ -20,7 +20,7 @@ def run(tab) :
 	df_grouped = df3.groupby("etoiles_group", observed=True)["moy_prob_par_repo"].mean()
 
 	# Tracé du diagramme (en barres) avec classes
-	plt.figure(figsize=(18,8))
+	plt.figure(figsize=(6, 6))
 	bars=plt.bar(
 	    labels,
 	    df_grouped.values,
@@ -28,15 +28,16 @@ def run(tab) :
 	)
 	for bar, avg in zip(bars, df_grouped) :
 	    plt.text(
-	       bar.get_x()+bar.get_width()/3,
+	       bar.get_x()+bar.get_width()/8,
 	       bar.get_height()+0.1,
 	       f"{avg:.1f}",
 	       fontsize=12
 	   )
-	plt.xlabel("Star classes (balanced classes)", fontweight= "bold")
-	plt.ylabel("Average Green Issues per 1000 lines", fontweight= "bold")
-	plt.title("Average Green Issues per 1000 Lines by Repository Star Range", fontweight="bold")
-	plt.xticks(rotation=45)
+	plt.xlabel("Star classes (balanced classes)", fontweight= "bold", fontsize=14)
+	plt.ylabel("Average Green Issues per 1000 lines", fontweight= "bold", fontsize=14)
+#	plt.title("Average Green Issues per 1000 Lines by Repository Star Range", fontweight="bold", fontsize=14)
+	plt.xticks(rotation=45, fontsize=12)
+	plt.yticks(fontsize=12)
 	plt.tight_layout()
 	plt.savefig(RESULTATS_DIR / "R03-nb_issues-nb_stars.pdf")
 	

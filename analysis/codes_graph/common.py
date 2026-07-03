@@ -8,6 +8,7 @@ import colorsys # permet de définir les couleurs des camemberts
 import seaborn as sns # pour utiliser les echelles de couleur
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
+import textwrap
 
 
 BASE_DIR = Path.home() / "auto_codeql_analyzer"

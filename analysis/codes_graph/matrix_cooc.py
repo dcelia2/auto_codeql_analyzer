@@ -62,7 +62,7 @@ def run(tab) :
 	    colors
 	)
 	new_cmap.set_under("white")
-	plt.figure(figsize=(9, 10))
+	plt.figure(figsize=(9, 12))
 	ax = sns.heatmap(
 	    matrix,
 	    cmap=new_cmap,
@@ -89,12 +89,8 @@ def run(tab) :
 	)
 
 	plt.xticks(rotation=90, fontsize=9)
-	plt.yticks(rotation=0, fontsize=9)
-	plt.title(
-	    "Co-occurrence Matrix of Green issues",
-	    fontsize=12,
-	    fontweight="bold"
-	)
+	plt.yticks(rotation=0, fontsize=10)
+#	plt.title("Co-occurrence Matrix of Green issues", fontsize=12, fontweight="bold")
 	plt.tight_layout()
 	plt.savefig( RESULTATS_DIR / "matrix_cooccurrences.pdf", bbox_inches="tight")
 

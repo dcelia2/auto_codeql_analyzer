@@ -11,7 +11,7 @@ def run(tab) :
 	coef = np.polyfit(log_x, log_y, 1)
 	trend = np.poly1d(coef)
 	x_sorted=np.sort(x)
-	plt.figure(figsize=(14, 8))
+	plt.figure(figsize=(7, 7))
 	plt.xscale("log")
 	plt.yscale("log")
 	plt.scatter(x, y, alpha=0.5, color="green")
@@ -21,9 +21,11 @@ def run(tab) :
 	    color="red",
 	    linewidth=1
 	)
-	plt.xlabel("Number of Lines in Repository (log scale)", fontweight= "bold")
-	plt.ylabel("Green Issues per 1000 Lines (log scale)", fontweight= "bold")
-	plt.title("Green Issue Density vs Repository Size", fontweight= "bold")
+	plt.xticks(fontsize=12)
+	plt.yticks(fontsize=12)
+	plt.xlabel("Number of Lines in Repository (log scale)", fontweight= "bold", fontsize=14)
+	plt.ylabel("Green Issues per 1000 Lines (log scale)", fontweight= "bold", fontsize=14)
+#	plt.title("Green Issue Density vs Repository Size", fontweight= "bold")
 	plt.grid(True, linestyle="--", alpha=0.4)
 	plt.savefig(RESULTATS_DIR / "R12-nb_issues_by_1000lines-nb_lines.pdf")
 
@@ -34,7 +36,7 @@ def run(tab) :
 	plt.ylim(0,30)
 	plt.xlabel("Number of lines in Repositories")
 	plt.ylabel("Green issues per 1000 lines")
-	plt.title("Green issue Density vs Repository Size", fontweight="bold")
+#	plt.title("Green issue Density vs Repository Size", fontweight="bold")
 
 
 if __name__== "__main__" :

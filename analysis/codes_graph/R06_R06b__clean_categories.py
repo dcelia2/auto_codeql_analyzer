@@ -14,22 +14,21 @@ def run(tab) :
 	    }])
 	])
 	colors=generate_distinct_colors(16)
-	plt.figure(figsize=(18, 10))
+	plt.figure(figsize=(8, 8))
 	plt.pie(
 	    df_plot["repos_with_0_issue"],
 	    labels=df_plot["category"],
 	    colors=colors,
+	    radius=0.85,
 	    autopct="%1.1f%%",
-	    startangle=0,
+	    startangle=25,
 	    wedgeprops={
 	        "edgecolor": "white",
 	        "linewidth":1
-	    }
+	    },
+	    textprops={"fontsize": 12}
 	)
-	plt.title(
-	    "Distribution of Repositories with 0 Green Issue by Category",
-	    fontweight="bold"
-	)
+#	plt.title("Distribution of Repositories with 0 Green Issue by Category", fontweight="bold")
 	plt.tight_layout()
 	plt.savefig(RESULTATS_DIR / "R06-nb_clean_repo_by_categories.pdf")
 
@@ -38,7 +37,7 @@ def run(tab) :
 	r=open(SQL_DIR / "R06b-pct_0issue_by_categories.sql").read()
 	df=pd.read_sql_query(r, tab)
 	df_plot = df.copy()
-	plt.figure(figsize=(18, 8))
+	plt.figure(figsize=(8, 8))
 	bars= plt.bar(
 	    df_plot["category"],
 	    df_plot["percentage_zero_issue"],
@@ -51,7 +50,7 @@ def run(tab) :
 			f"{total}*",
 			ha="center",
 			va="bottom",
-			fontsize=9
+			fontsize=11
 		)
 	legend_item= Line2D(
 	    [0], [0],
@@ -61,13 +60,14 @@ def run(tab) :
 	plt.legend(
 	    handles=[legend_item],
 	    handlelength=0,
-	    fontsize=10,
+	    fontsize=12,
 	    loc= "upper right"
 	)
-	plt.ylabel("% of repos with 0 green issue", fontweight= "bold")
-	plt.xlabel("Categories", fontweight= "bold")
-	plt.title("Clean Repository Rate by Category", fontweight="bold")
-	plt.xticks(rotation=45, ha="right")
+	plt.ylabel("% of repos with 0 green issue", fontweight= "bold", fontsize=14)
+	plt.xlabel("Categories", fontweight= "bold", fontsize=14)
+#	plt.title("Clean Repository Rate by Category", fontweight="bold", fontsize=14)
+	plt.xticks(rotation=45, ha="right", fontsize=12)
+	plt.yticks(fontsize=12)
 	plt.tight_layout()
 	plt.savefig(RESULTATS_DIR / "R06b-clean_repo_rate_by_category.pdf")
 
